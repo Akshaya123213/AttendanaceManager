@@ -1,0 +1,92 @@
+import java.util.*;
+
+class Student {
+    int id;
+    String name;
+    boolean isPresent;
+
+    Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+        this.isPresent = false;
+    }
+
+    void markPresent() {
+        this.isPresent = true;
+    }
+
+    void markAbsent() {
+        this.isPresent = false;
+    }
+
+    @Override
+    public String toString() {
+        return id + " - " + name + " - " + (isPresent ? "Present" : "Absent");
+    }
+}
+
+public class AttendanceSystem {
+    static Map<Integer, Student> studentMap = new HashMap<>();
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        while (true) {
+            System.out.println("\n===== Attendance Management System =====");
+            System.out.println("1. Add Student");
+            System.out.println("2. Mark Attendance");
+            System.out.println("3. View Attendance");
+            System.out.println("4. Exit");
+            System.out.print("Enter choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+
+            switch (choice) {
+                case 1 -> addStudent();
+                case 2 -> markAttendance();
+                case 3 -> viewAttendance();
+                case 4 -> {
+                    System.out.println("Exiting system...");
+                    return;
+                }
+                default -> System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+    static void addStudent() {
+        System.out.print("Enter student ID: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();  // consume newline
+
+        System.out.print("Enter student name: ");
+        String name = scanner.nextLine();
+
+        if (studentMap.containsKey(id)) {
+            System.out.println("Student ID already exists!");
+        } else {
+            studentMap.put(id, new Student(id, name));
+            System.out.println("Student added successfully.");
+        }
+    }
+
+    static void markAttendance() {
+        System.out.println("Marking attendance (P = Present, A = Absent):");
+        for (Student s : studentMap.values()) {
+            System.out.print(s.name + " (P/A): ");
+            String input = scanner.nextLine().trim().toUpperCase();
+            if ("P".equals(input)) {
+                s.markPresent();
+            } else {
+                s.markAbsent();
+            }
+        }
+    }
+
+    static void viewAttendance() {
+        System.out.println("\n--- Attendance Report ---");
+        for (Student s : studentMap.values()) {
+            System.out.println(s);
+        }
+    }
+}
